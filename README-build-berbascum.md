@@ -1,11 +1,24 @@
 # Signal Desktop compilation for arm64 devices with small screens
+In this repository can be found some resources to get working the Signal Desktop app on arm64 devices running a Debian based linux distribution.
+
+Both compilation procedure and the app installation and use are being tested on a Xiaomi Poco X3 Pro (vayu).
+
+The Signal's original README.md file can be accessed [here: README.md](https://github.com/signalapp/Signal-Desktop/blob/main/README.md)
 
 ## References
+To get this compilation procedure working, the next resources has been analized:
+
 [GitHub Signal-Desktop](https://github.com/signalapp/Signal-Desktop)
+
 [Andrea Fortuna](https://andreafortuna.org/2019/03/27/how-to-build-signal-desktop-on-linux/)
+
 [Adam Teide](https://gitlab.com/adamthiede/signal-desktop-builder/-/blob/master/patches/0001-Remove-no-sandbox-patch.patch?ref_type=heads)
+
 [Bernardo Giordano](https://github.com/BernardoGiordano/signal-desktop-pi4)
+
 [Tianon](https://github.com/tianon/dockerfiles/blob/master/signal-desktop/Dockerfile)
+
+[0mniteck](https://github.com/0mniteck/Signal-Desktop-Mobian)
 
 ## Build environment
 The tested build environment is a standard Debian Bookworm arm64 chroot installed with debootstrap with the apt requisites installed
@@ -18,6 +31,9 @@ apt-get install rsync build-essential libssl-dev curl git git-lfs wget vim fuse-
 ### fpm
 ```
 gem install fpm
+```
+Set the var to force system fpm use:
+```
 export USE_SYSTEM_FPM=true ## Should be defined for yarn build
 ```
 
@@ -36,6 +52,8 @@ NOTE: source /root/.bashrc required or session restart
 ## Prepare signal desktop source
 ```
 git clone  https://github.com/signalapp/Signal-Desktop.git && cd Signal-Desktop
+```
+```
 git-lfs install
 ```
 
@@ -65,17 +83,18 @@ nvm use
 npm install --global yarn
 ```
 
-### Ensure system fpm
+### Ensure use system fpm
+Installation of arm64 fpm binary is previously required to avoid errors when installing deps with yarn.
 ```
 export USE_SYSTEM_FPM=true
 ```
 
 ## Configure
-In this step, the patches are applied
+In this step, the signal official patches will be applied.
 ```
 yarn install --frozen-lockfile
 ```
-Disable --no-sandbox
+Disable --no-sandbox. The patch need to be applied after the yarn install command:
 
 ```
 sed -i 's/^                exec += \" --no-sandbox %U\";/                exec += " %U";/g' node_modules/app-builder-lib/out/targets/LinuxTargetHelper.js 
@@ -83,19 +102,19 @@ sed -i 's/^                exec += \" --no-sandbox %U\";/                exec +=
 
 ## Compilation
 ```
-## Compilation
 yarn generate
 yarn build
 ```
 
 ## Compilation errors
-There is some known compilation errors
+There are some known compilation errors
 
 ### Error: node-abi
-> Error: Could not detect abi for version 30.0.9 and runtime electron: Is not a trouble for the compilation.
+> Error: Could not detect abi for version 30.0.9 and runtime electron
+Is not a trouble for the compilation process.
 
 ## GUI errors
 
-### Droidian scale 300
-When using Phosh with scale 300, the scale needs to be adjusted to 75% in the signal desktop settings
+### Phosh scale 300
+> When using Phosh with scale 300 on small screens, the scale needs to be adjusted to 75% in the signal desktop settings.
 
