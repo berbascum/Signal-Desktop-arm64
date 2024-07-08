@@ -1,0 +1,18 @@
+diff --git a/app/main.ts b/app/main.ts
+index 99482de9e..94530dd64 100644
+--- a/app/main.ts
++++ b/app/main.ts
+@@ -1353,10 +1353,10 @@ async function showSettingsWindow() {
+   }
+ 
+   const options = {
+-    width: 700,
+-    height: 700,
++    width: 250,
++    height: 400,
+     frame: true,
+-    resizable: false,
++    resizable: true,
+     title: getResolvedMessagesLocale().i18n('icu:signalDesktopPreferences'),
+     titleBarStyle: mainTitleBarStyle,
+     autoHideMenuBar: true,
