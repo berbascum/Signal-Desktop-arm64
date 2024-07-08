@@ -5486,6 +5486,11 @@
     "messageformat": "Aquesta actualització també millora la visualització de les respostes citades per als idiomes RTL."
   },
   "icu:WhatsNew__v7.14--0": {
-    "messageformat": "Hem corregit un error que feia que desapareguessin els missatges de veu si canviaves a un altre xat o aplicació mentre l'estaves gravant. Els missatges de veu en curs es desen com a esborranys perquè els puguis revisar i enviar quan tornis al xat."
+    "messageformat": "Hem corregit un error que feia que desapareguessin els missatges de veu si canviaves a un altre xat o aplicació mentre l'estaves gravant. Els missatges de veu en curs es desen com a esborranys perquè els puguis revisar i enviar quan tornis al xat.",
+    "description": "Notes de la versió 7.14"
+  },
+  "icu:WhatsNew__v7.14--0--droidiam--community.1": {
+    "messageformat": "S'ha corregit el tamany de la finestra de configuracions de l'aplicació per adispositius amb pantalles petites.",
+    "description": "Notes de la versió 7.1-0-droidian-community.1"
   }
 }
