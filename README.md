@@ -1,45 +1,120 @@
-<!-- Copyright 2014 Signal Messenger, LLC -->
-<!-- SPDX-License-Identifier: AGPL-3.0-only -->
+# Signal Desktop compilation for arm64 devices with small screens
+In this repository can be found some resources to get working the Signal Desktop app on arm64 devices running a Debian based linux distribution.
 
-# Signal Desktop
+Both compilation procedure and the app installation and use are being tested on a Xiaomi Poco X3 Pro (vayu).
 
-Signal Desktop links with Signal on [Android](https://github.com/signalapp/Signal-Android) or [iOS](https://github.com/signalapp/Signal-iOS) and lets you message from your Windows, macOS, and Linux computers.
+The Signal's original README.md file can be accessed [here: README.md](https://github.com/signalapp/Signal-Desktop/blob/main/README.md)
 
-[Install the production version](https://signal.org/download/) or help us out by [installing the beta version](https://support.signal.org/hc/articles/360007318471-Signal-Beta).
+## References
+To get this compilation procedure working, the next resources has been analized:
 
-## Got a question?
+[GitHub Signal-Desktop](https://github.com/signalapp/Signal-Desktop)
 
-You can find answers to a number of frequently asked questions on our [support site](https://support.signal.org/).
-The [community forum](https://community.signalusers.org/) is another good place for questions.
+[Andrea Fortuna](https://andreafortuna.org/2019/03/27/how-to-build-signal-desktop-on-linux/)
 
-## Found a Bug?
+[Adam Teide](https://gitlab.com/adamthiede/signal-desktop-builder/-/blob/master/patches/0001-Remove-no-sandbox-patch.patch?ref_type=heads)
 
-Please search for any [existing issues](https://github.com/signalapp/Signal-Desktop/issues) that describe your bug in order to avoid duplicate submissions.
+[Bernardo Giordano](https://github.com/BernardoGiordano/signal-desktop-pi4)
 
-## Have a feature request, question, comment?
+[Tianon](https://github.com/tianon/dockerfiles/blob/master/signal-desktop/Dockerfile)
 
-Please use our community forum: https://community.signalusers.org/
+[0mniteck](https://github.com/0mniteck/Signal-Desktop-Mobian)
 
-## Contributing Code
+## Build environment
+The tested build environment is a standard Debian Bookworm arm64 chroot installed with debootstrap with the apt requisites installed
 
-Please see [CONTRIBUTING.md](https://github.com/signalapp/Signal-Desktop/blob/main/CONTRIBUTING.md)
-for setup instructions and guidelines for new contributors. Don't forget to sign the [CLA](https://signal.org/cla/).
+### Apt prerquisites
+```
+apt-get install rsync build-essential libssl-dev curl git git-lfs wget vim fuse-overlayfs python3-full locales dialog libcrypto++-dev libcrypto++8 libgtk-3-dev libvips42 libxss-dev snapd bc screen libffi-dev libglib2.0-0 libnss3 libatk1.0-0 libatk-bridge2.0-0 libx11-xcb1 libgdk-pixbuf-2.0-0 libgtk-3-0 libdrm2 libgbm1 ruby ruby-dev curl clang llvm lld clang-tools generate-ninja ninja-build pkg-config tcl
+```
 
-## Contributing Funds
+### fpm
+```
+gem install fpm
+```
+Set the var to force system fpm use:
+```
+export USE_SYSTEM_FPM=true ## Should be defined for yarn build
+```
 
-You can donate to Signal development through the [Signal Technology Foundation](https://signal.org/donate), an independent 501c3 nonprofit.
+### set PATH (not sure if required)
+```
+export PATH="/Signal-Desktop/node_modules/.bin:/root/.cargo/bin:/opt/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+```
 
-## Cryptography Notice
+### Install nvm
+```
+curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+```
 
-This distribution includes cryptographic software. The country in which you currently reside may have restrictions on the import, possession, use, and/or re-export to another country, of encryption software.
-BEFORE using any encryption software, please check your country's laws, regulations and policies concerning the import, possession, or use, and re-export of encryption software, to see if this is permitted.
-See <http://www.wassenaar.org/> for more information.
+NOTE: source /root/.bashrc required or session restart
 
-The U.S. Government Department of Commerce, Bureau of Industry and Security (BIS), has classified this software as Export Commodity Control Number (ECCN) 5D002.C.1, which includes information security software using or performing cryptographic functions with asymmetric algorithms.
-The form and manner of this distribution makes it eligible for export under the License Exception ENC Technology Software Unrestricted (TSU) exception (see the BIS Export Administration Regulations, Section 740.13) for both object code and source code.
+## Prepare signal desktop source
+```
+git clone  https://github.com/signalapp/Signal-Desktop.git && cd Signal-Desktop
+```
+```
+git-lfs install
+```
 
-## License
+### Config git user info if needed
+```
+git config --global user.name <user>
+git config --global user.email <email>
+```
 
-Copyright 2013-2024 Signal Messenger, LLC
+### Select a version to build
+```
+git checkout <version_tag>
+```
 
-Licensed under the GNU AGPLv3: https://www.gnu.org/licenses/agpl-3.0.html
+### Apply droidian patches
+Apply the patches in patches/droidian dir using git apply
+
+### Prepare nvm
+```
+nvm use
+nvm install
+nvm use
+```
+
+### Install yarn
+```
+npm install --global yarn
+```
+
+### Ensure use system fpm
+Installation of arm64 fpm binary is previously required to avoid errors when installing deps with yarn.
+```
+export USE_SYSTEM_FPM=true
+```
+
+## Configure
+In this step, the signal official patches will be applied.
+```
+yarn install --frozen-lockfile
+```
+Disable --no-sandbox. The patch need to be applied after the yarn install command:
+
+```
+sed -i 's/^                exec += \" --no-sandbox %U\";/                exec += " %U";/g' node_modules/app-builder-lib/out/targets/LinuxTargetHelper.js 
+```
+
+## Compilation
+```
+yarn generate
+yarn build
+```
+
+## Compilation errors
+There are some known compilation errors
+
+### Error: node-abi
+> Error: Could not detect abi for version 30.0.9 and runtime electron
+Is not a trouble for the compilation process.
+
+## GUI errors
+
+### Phosh scale 300
+> When using Phosh with scale 300 on small screens, the scale needs to be adjusted to 75% in the signal desktop settings.
+
