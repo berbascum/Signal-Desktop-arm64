@@ -50,6 +50,9 @@ git config --global user.email <email>
 git checkout <version_tag>
 ```
 
+### Apply droidian patches
+Apply the patches in patches/droidian dir using git apply
+
 ### Prepare nvm
 ```
 nvm use

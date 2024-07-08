@@ -47,9 +47,8 @@ git-lfs install
 #git config --global user.name <user>
 #git config --global user.email <email>
 
-###############
-## Backup-build-env-signaldesktop-001
-###############
+## Apply Droidian patches
+git apply patches/droidian/7140-1_Fix-settings-window-size-small-screens.patch
 
 << "DEPRECATED?"
 ## PATCHES from "https://gitlab.com/adamthiede"
