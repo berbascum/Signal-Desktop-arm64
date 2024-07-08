@@ -5490,7 +5490,7 @@
     "description": "Notes de la versió 7.14"
   },
   "icu:WhatsNew__v7.14--0--droidiam--community.1": {
-    "messageformat": "S'ha corregit el tamany de la finestra de configuracions de l'aplicació per adispositius amb pantalles petites.",
+    "messageformat": "S'ha corregit el tamany de la finestra de configuracions de l'aplicació per a dispositius amb pantalles petites.",
     "description": "Notes de la versió 7.1-0-droidian-community.1"
   }
 }

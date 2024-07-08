@@ -94,7 +94,7 @@ There is some known compilation errors
 ### Error: node-abi
 > Error: Could not detect abi for version 30.0.9 and runtime electron: Is not a trouble for the compilation.
 
-## GUI errorss
+## GUI errors
 
 ### Droidian scale 300
 When using Phosh with scale 300, the scale needs to be adjusted to 75% in the signal desktop settings
