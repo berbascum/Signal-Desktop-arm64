@@ -97,7 +97,7 @@ yarn install --frozen-lockfile
 Disable --no-sandbox. The patch need to be applied after the yarn install command:
 
 ```
-sed -i 's/^                exec += \" --no-sandbox %U\";/                exec += " %U";/g' node_modules/app-builder-lib/out/targets/LinuxTargetHelper.js 
+sed -i 's/^                exec += \" --no-sandbox %U\";/                exec += "--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations %U";/g' node_modules/app-builder-lib/out/targets/LinuxTargetHelper.js 
 ```
 
 ## Compilation
